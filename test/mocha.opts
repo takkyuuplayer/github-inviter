@@ -1,4 +1,5 @@
 --require babel-register
+--require babel-polyfill
 --require jsdom-global/register
 --require ./test/polyfill
 --require ./test/enzyme
