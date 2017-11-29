@@ -1,6 +1,7 @@
-.envrc
-yarn.lock
-package-lock.json
+/.envrc
+/yarn.lock
+/package-lock.json
+/cache
 
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
