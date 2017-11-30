@@ -1,5 +1,4 @@
 import express from 'express';
-import HttpStatus from 'http-status-codes';
 import urijs from 'urijs';
 import uuid from 'uuid';
 
