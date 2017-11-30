@@ -25,9 +25,11 @@ describe('middlewares/csrf', () => {
         res.send('Hello World!');
       });
 
-      app.listen(3000, () => {});
+      const server = app.listen(3000, () => {});
 
       await request('http://localhost:3000');
+
+      server.close();
     });
   });
 });
