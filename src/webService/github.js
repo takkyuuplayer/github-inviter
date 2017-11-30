@@ -3,6 +3,7 @@ import urijs from 'urijs';
 import rp from 'request-promise';
 import merge from 'lodash/merge';
 import isString from 'lodash/fp/isString';
+import { slurpJSON } from '../utils';
 
 const AUTHOLIZATION_URL = 'https://github.com/login/oauth/authorize';
 const LOGIN_URL = 'https://github.com/login/oauth/access_token';
@@ -18,6 +19,7 @@ export default class github {
     this.personalToken = personalToken;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
+    this.apiEndPoints = slurpJSON('./cache/github.json');
 
     freeze(this);
   }
