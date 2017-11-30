@@ -25,6 +25,7 @@
     "lodash": "^4.17.4",
     "mocha": "^4.0.1",
     "moment": "^2.19.3",
+    "morgan": "^1.9.0",
     "power-assert": "^1.4.4",
     "prop-types": "^15.6.0",
     "raf": "^3.4.0",
@@ -44,6 +45,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "run": "$(npm bin)/babel-node ./bin/app.js",
     "build": "react-scripts build",
     "test": "npm run test:script",
     "test:script": "mocha src/**/*.spec.{js,jsx}",

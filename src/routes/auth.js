@@ -23,15 +23,16 @@ router.get('/github', (req, res) => {
   res.redirect(ws.signInLink(state).toString());
 });
 
-router.post('/github/callback', async (req, res) => {
+router.get('/github/callback', async (req, res) => {
   const { state } = req.session;
   delete req.session.state;
 
-  if (req.body.state !== state) {
+
+  if (req.query.state !== state) {
     return res.redirect('/');
   }
 
-  const query = await ws.sendRequest(ws.createAuthorizationRequest(req.body.code));
+  const query = await ws.sendRequest(ws.createAuthorizationRequest(req.query.code));
   const params = urijs.parseQuery(query);
   const gh = new Github({
     personalToken: params.access_token,
@@ -39,10 +40,10 @@ router.post('/github/callback', async (req, res) => {
   const [user, emails] = await Promise.all([
     gh.sendRequest({ method: 'GET', uri: githubEndpoints.current_user_url }),
     gh.sendRequest({ method: 'GET', uri: githubEndpoints.emails_url }),
-  ]).then(responses => responses.map(response => JSON.parse(response.body)));
+  ]);
 
-  const username = user.login;
-  const primaryEmail = emails.filter(emailInfo =>
+  const username = JSON.parse(user).login;
+  const primaryEmail = JSON.parse(emails).filter(emailInfo =>
     emailInfo.primary && emailInfo.verified)[0].email;
 
   req.session = Object.assign({}, req.session, {
