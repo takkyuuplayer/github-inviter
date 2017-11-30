@@ -1,8 +1,11 @@
 import express from 'express';
 import urijs from 'urijs';
 import uuid from 'uuid';
+import jwt from 'jsonwebtoken';
+
 
 import Github from 'webService/github';
+import { signingSecret } from '../config';
 import { slurpJSON } from '../utils';
 
 
@@ -53,6 +56,18 @@ router.get('/github/callback', async (req, res) => {
   });
 
   return isAdmin ? res.redirect('/admin') : res.redirect('/user');
+});
+
+router.get('/token', (req, res) => {
+  try {
+    const params = jwt.verify(req.query.token, signingSecret);
+    delete params.iat;
+    req.session = Object.assign({}, req.session, params);
+  } catch (e) {
+    console.error(e);
+  }
+
+  return res.redirect('/');
 });
 
 export default router;

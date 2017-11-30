@@ -33,7 +33,7 @@ class GenerateLink extends React.Component {
     }).then(response => response.json())
       .then((json) => {
         this.setState({
-          url: urijs(window.location.origin).query({
+          url: urijs(window.location.origin).path('/auth/token').query({
             token: json.data,
           }).toString(),
         });
