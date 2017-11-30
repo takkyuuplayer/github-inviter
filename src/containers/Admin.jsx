@@ -17,7 +17,8 @@ class Admin extends React.Component {
       method: 'GET',
       credentials: 'include',
     }).then(response => response.json())
-      .then(json => this.props.setTeams(json.data));
+      .then(json => this.props.setTeams(json.data))
+      .catch(err => console.error(err));
   }
   render() {
     return (
