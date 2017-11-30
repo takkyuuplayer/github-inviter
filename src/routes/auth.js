@@ -45,21 +45,15 @@ router.get('/github/callback', async (req, res) => {
   const username = JSON.parse(user).login;
   const primaryEmail = JSON.parse(emails).filter(emailInfo =>
     emailInfo.primary && emailInfo.verified)[0].email;
+  const isAdmin = (username === admin.login);
 
   req.session = Object.assign({}, req.session, {
     username,
     primaryEmail,
-    isAdmin: (username === admin.login),
+    isAdmin,
   });
 
-  return res.send({
-    meta: { code: HttpStatus.OK, message: 'OK' },
-    data: {
-      username: req.session.username,
-      primaryEmail: req.session.primaryEmail,
-      isAdmin: req.session.isAdmin,
-    },
-  });
+  return isAdmin ? res.redirect('/admin') : res.redirect('/user');
 });
 
 export default router;
