@@ -5,6 +5,7 @@ import path from 'path';
 import morgan from 'morgan';
 
 import auth from 'routes/auth';
+import api from 'routes/api';
 import cookieSession from 'middlewares/cookieSession';
 import csrf from 'middlewares/csrf';
 
@@ -21,6 +22,7 @@ app.use(cookieSession);
 app.use(csrf);
 
 app.use('/auth', auth);
+app.use('/api', api);
 app.use(express.static(pathTo('build')));
 app.use('/*', express.static(path.join(pathTo('build'), 'index.html')));
 
