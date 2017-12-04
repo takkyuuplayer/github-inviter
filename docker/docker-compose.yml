@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    container_name: github-inviter
+    image: node
+    volumes:
+      - ../:/srv/
+    ports:
+      - 5000:5000
+    env_file: .env
+    environment:
+      - TZ=Canada/Eastern
+    tty: true
+    command: bash
+    working_dir: /srv

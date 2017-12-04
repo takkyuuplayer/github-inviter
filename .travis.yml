@@ -5,12 +5,12 @@ env:
     - GH_PERSONAL_TOKEN=dummy
     - GH_BASIC_CLIENT_ID=dummy
     - GH_BASIC_CLIENT_SECRET=dummy
+    - TZ=Canada/Eastern
 before_install:
   - env | sort
   - npm install --global yarn
 install:
   - make travis
-  - echo 'America/New_York' | sudo tee /etc/timezone
 node_js:
   - "node"
   - "lts/*"
