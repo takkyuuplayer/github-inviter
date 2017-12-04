@@ -11,6 +11,12 @@ cache:
 test:
 	yarn run test
 
+travis: node_modules node_modules/upgrade
+	mkdir -p cache
+	curl https://api.github.com/ > ./cache/github.json
+	cp test/data/admin.json cache/admin.json
+	cp test/data/teams.json cache/teams.json
+
 node_modules:
 	yarn install
 
