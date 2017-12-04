@@ -10,6 +10,7 @@ before_install:
   - npm install --global yarn
 install:
   - make travis
+  - echo 'America/New_York' | sudo tee /etc/timezone
 node_js:
   - "node"
   - "lts/*"
