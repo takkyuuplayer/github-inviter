@@ -1,5 +1,7 @@
-import sha256 from 'sha256';
+export const signingSecret = (process.env.SIGNING_SECRET || 'replace.me');
 
-export const signingSecret = sha256(`${process.env.GH_BASIC_CLIENT_ID}${process.env.GH_BASIC_CLIENT_SECRET}`);
-
-export default signingSecret;
+export const github = {
+  personalToken: (process.env.GH_PERSONAL_TOKEN || 'replace.me'),
+  clientId: (process.env.GH_BASIC_CLIENT_ID || 'replace.me'),
+  clientSecret: (process.env.GH_BASIC_CLIENT_SECRET || 'replace.me'),
+};

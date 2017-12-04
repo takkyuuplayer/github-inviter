@@ -1,6 +1,9 @@
 language: node_js
 env:
   - NODE_PATH=$PWD/src
+  - GH_PERSONAL_TOKEN=dummy
+  - GH_BASIC_CLIENT_ID=dummy
+  - GH_BASIC_CLIENT_SECRET=dummy
 before_install:
   - env | sort
   - npm install --global yarn
