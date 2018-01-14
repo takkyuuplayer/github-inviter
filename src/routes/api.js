@@ -2,6 +2,7 @@ import express from 'express';
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
+import Github from 'webService/github';
 import includes from 'lodash/includes';
 import some from 'lodash/some';
 import isUndefined from 'lodash/isUndefined';
@@ -10,6 +11,7 @@ import { signingSecret } from '../config';
 
 
 const router = express.Router();
+const ws = new Github();
 
 const teams = slurpJSON('cache/teams.json');
 
@@ -133,6 +135,29 @@ router.get(
         message: 'OK',
       },
     });
+  },
+);
+
+router.all(
+  '/join',
+  invitationAccessControl,
+  async (req, res) => {
+    const invitation = ws.createTeamInvitationRequest(
+      req.session.teamId,
+      req.session.username,
+    );
+    try {
+      const invited = await ws.sendRequest(invitation);
+      res.send({
+        meta: {
+          code: 200,
+          message: 'OK',
+        },
+        data: invited,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
 );
 
