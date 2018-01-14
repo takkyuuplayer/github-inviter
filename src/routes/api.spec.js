@@ -77,6 +77,167 @@ describe('POST /api/sign', () => {
   });
 });
 
+describe('GET /api/invitationAccessControl', () => {
+  it('should return 200 for valid parameters', async () => {
+    const ag2 = request.agent(app);
+
+    await ag2
+      .post('/api/test/session')
+      .type('form')
+      .send({ primaryEmail: 'p', username: 'u', teamId: 1 })
+      .expect(200);
+
+    await ag2
+      .get('/api/invitationAccessControl')
+      .expect(200);
+  });
+
+  it('should return 403 if primaryEmail is missing', async () => {
+    const ag2 = request.agent(app);
+
+    await ag2
+      .post('/api/test/session')
+      .type('form')
+      .send({ username: 'u', teamId: 1 })
+      .expect(200);
+
+    await ag2
+      .get('/api/invitationAccessControl')
+      .expect(403, {
+        meta: {
+          code: 403,
+          message: 'You must login with your github account.',
+        },
+      });
+  });
+
+  it('should return 403 if username is missing', async () => {
+    const ag2 = request.agent(app);
+
+    await ag2
+      .post('/api/test/session')
+      .type('form')
+      .send({ primaryEmail: 'p', teamId: 1 })
+      .expect(200);
+
+    await ag2
+      .get('/api/invitationAccessControl')
+      .expect(403, {
+        meta: {
+          code: 403,
+          message: 'You must login with your github account.',
+        },
+      });
+  });
+
+  it('should return 403 if teamId is missing', async () => {
+    const ag2 = request.agent(app);
+
+    await ag2
+      .post('/api/test/session')
+      .type('form')
+      .send({ primaryEmail: 'p', username: 'u' })
+      .expect(200);
+
+    await ag2
+      .get('/api/invitationAccessControl')
+      .expect(403, {
+        meta: {
+          code: 403,
+          message: 'Ask administrator for invitation link',
+        },
+      });
+  });
+
+  context('when IP address access control exists', () => {
+    it('should return 200 if IP address is allowed', async () => {
+      const ag2 = request.agent(app);
+
+      await ag2
+        .post('/api/test/session')
+        .type('form')
+        .send({
+          primaryEmail: 'p',
+          username: 'u',
+          teamId: 1,
+          ipAddresses: '127.0.0.1\n192.168.160.1',
+        })
+        .expect(200);
+
+      await ag2
+        .get('/api/invitationAccessControl')
+        .set('X-Forwarded-For', '192.168.160.1')
+        .expect(200);
+    });
+    it('should return 403 if IP address is not allowed', async () => {
+      const ag2 = request.agent(app);
+
+      await ag2
+        .post('/api/test/session')
+        .type('form')
+        .send({
+          primaryEmail: 'p',
+          username: 'u',
+          teamId: 1,
+          ipAddresses: 'ip1\nip2',
+        })
+        .expect(200);
+
+      await ag2
+        .get('/api/invitationAccessControl')
+        .expect(403, {
+          meta: {
+            code: 403,
+            message: 'Your IP address must be one of [ip1, ip2]',
+          },
+        });
+    });
+  });
+  context('when email domain access control exists', () => {
+    it('should return 200 if primaryEmail is allowed', async () => {
+      const ag2 = request.agent(app);
+
+      await ag2
+        .post('/api/test/session')
+        .type('form')
+        .send({
+          primaryEmail: 'test@takkyuuplayer.com',
+          username: 'u',
+          teamId: 1,
+          emailDomains: 'takkyuuplayer.com\ngmail.com',
+        })
+        .expect(200);
+
+      await ag2
+        .get('/api/invitationAccessControl')
+        .expect(200);
+    });
+    it('should return 403 if primaryEmail is not allowed', async () => {
+      const ag2 = request.agent(app);
+
+      await ag2
+        .post('/api/test/session')
+        .type('form')
+        .send({
+          primaryEmail: 'test@yahoo.com',
+          username: 'u',
+          teamId: 1,
+          emailDomains: 'takkyuuplayer.com\ngmail.com',
+        })
+        .expect(200);
+
+      await ag2
+        .get('/api/invitationAccessControl')
+        .expect(403, {
+          meta: {
+            code: 403,
+            message: 'Your primary email must have one of [takkyuuplayer.com, gmail.com] (sub)domain(s)',
+          },
+        });
+    });
+  });
+});
+
 describe('GET /api/session', () => {
   it('should return 200 with current session', async () => {
     await agent.get('/api/session')

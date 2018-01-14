@@ -2,6 +2,9 @@ import express from 'express';
 import HttpStatus from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
+import includes from 'lodash/includes';
+import some from 'lodash/some';
+import isUndefined from 'lodash/isUndefined';
 import { slurpJSON } from '../utils';
 import { signingSecret } from '../config';
 
@@ -67,5 +70,70 @@ router.get('/session', (req, res) => {
     },
   });
 });
+
+const invitationAccessControl = (req, res, next) => {
+  if (!req.session.username || !req.session.primaryEmail) {
+    res.status(HttpStatus.FORBIDDEN).send({
+      meta: {
+        code: HttpStatus.FORBIDDEN,
+        message: 'You must login with your github account.',
+      },
+    });
+    return;
+  }
+
+  if (!req.session.teamId) {
+    res.status(HttpStatus.FORBIDDEN).send({
+      meta: {
+        code: HttpStatus.FORBIDDEN,
+        message: 'Ask administrator for invitation link',
+      },
+    });
+    return;
+  }
+
+  const allowedIp = req.session.ipAddresses ?
+    req.session.ipAddresses.split(/\r\n|\r|\n/) : undefined;
+
+  if (!isUndefined(allowedIp) && !includes(allowedIp, req.ip)) {
+    res.status(HttpStatus.FORBIDDEN).send({
+      meta: {
+        code: HttpStatus.FORBIDDEN,
+        message: `Your IP address must be one of [${allowedIp.join(', ')}]`,
+      },
+    });
+    return;
+  }
+
+  const allowedDomains = req.session.emailDomains ?
+    req.session.emailDomains.split(/\r\n|\r|\n/) : undefined;
+
+  if (!isUndefined(allowedDomains)
+    && !some(allowedDomains, domain => req.session.primaryEmail.endsWith(domain))
+  ) {
+    res.status(HttpStatus.FORBIDDEN).send({
+      meta: {
+        code: HttpStatus.FORBIDDEN,
+        message: `Your primary email must have one of [${allowedDomains.join(', ')}] (sub)domain(s)`,
+      },
+    });
+    return;
+  }
+
+  next();
+};
+
+router.get(
+  '/invitationAccessControl',
+  invitationAccessControl,
+  (req, res) => {
+    res.send({
+      meta: {
+        code: HttpStatus.OK,
+        message: 'OK',
+      },
+    });
+  },
+);
 
 export default router;
