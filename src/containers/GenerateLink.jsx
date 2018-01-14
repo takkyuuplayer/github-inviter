@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import urijs from 'urijs';
+import copyToClipboard from 'copy-to-clipboard';
 
 class GenerateLink extends React.Component {
   constructor() {
@@ -9,12 +10,7 @@ class GenerateLink extends React.Component {
 
     this.generateInvitationLink = this.generateInvitationLink.bind(this);
   }
-  state = {
-    url: undefined,
-  }
   generateInvitationLink() {
-    this.setState({ url: undefined });
-
     const query = {};
 
     ['teamId', 'expiresAt', 'ipAddresses', 'emailDomains'].forEach((key) => {
@@ -32,18 +28,13 @@ class GenerateLink extends React.Component {
       credentials: 'include',
     }).then(response => response.json())
       .then((json) => {
-        this.setState({
-          url: urijs(window.location.origin).path('/auth/token').query({
-            token: json.data,
-          }).toString(),
-        });
+        const url = urijs(window.location.origin).path('/auth/token').query({
+          token: json.data,
+        }).toString();
+        copyToClipboard(url);
       });
   }
   render() {
-    const link = this.state.url
-      ? <a href={this.state.url} target="_blank">Share this link</a>
-      : '';
-
     const disabled = !this.props.teamId;
 
     return (
@@ -60,7 +51,6 @@ class GenerateLink extends React.Component {
           >Generate Link
           </button>
         </div>
-        <div className="col-sm-7">{link}</div>
       </div>
     );
   }

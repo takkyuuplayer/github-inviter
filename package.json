@@ -10,6 +10,7 @@
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
+    "copy-to-clipboard": "^3.0.8",
     "deep-freeze": "^0.0.1",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
