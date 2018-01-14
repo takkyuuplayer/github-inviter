@@ -64,10 +64,11 @@ router.get('/token', (req, res) => {
     delete params.iat;
     req.session = Object.assign({}, req.session, params);
   } catch (e) {
-    console.error(e);
+    res.send(e.message);
+    return;
   }
 
-  return res.redirect('/');
+  res.redirect('/');
 });
 
 export default router;

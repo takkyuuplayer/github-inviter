@@ -15,7 +15,8 @@ class GenerateLink extends React.Component {
 
     ['teamId', 'expiresAt', 'ipAddresses', 'emailDomains'].forEach((key) => {
       if (this.props[key] && this.props[key] !== '') {
-        query[key] = this.props[key];
+        // to use JWT `exp` feature
+        query[(key === 'expiresAt' ? 'exp' : key)] = this.props[key];
       }
     });
 
