@@ -62,6 +62,16 @@ describe('webService/github', () => {
     });
   });
 
+  describe('createTeamInvitationRequest', () => {
+    it('should return request', () => {
+      const req = ws.createTeamInvitationRequest(100, 'uname');
+      assert.deepStrictEqual(req, {
+        method: 'PUT',
+        uri: 'https://api.github.com/teams/100/memberships/uname',
+      });
+    });
+  });
+
   describe('sendRequest', () => {
     it('should send request ', async () => {
       const server = http.createServer((req, res) => {

@@ -8,6 +8,7 @@ import { github as config } from '../config';
 
 const AUTHOLIZATION_URL = 'https://github.com/login/oauth/authorize';
 const LOGIN_URL = 'https://github.com/login/oauth/access_token';
+const API_BASE_URL = 'https://api.github.com';
 
 const SCOPE = 'user:email';
 
@@ -59,6 +60,11 @@ export default class github {
       },
     };
   }
+
+  createTeamInvitationRequest = (teamId, username) => ({
+    method: 'PUT',
+    uri: `${API_BASE_URL}/teams/${teamId}/memberships/${username}`,
+  })
 
   sendRequest = request => rp(merge({}, this.headers(), request))
 }
