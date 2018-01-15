@@ -73,7 +73,7 @@ router.get('/session', (req, res) => {
   });
 });
 
-const invitationAccessControl = (req, res, next) => {
+const checkLogin = (req, res, next) => {
   if (!req.session.username || !req.session.primaryEmail) {
     res.status(HttpStatus.FORBIDDEN).send({
       meta: {
@@ -83,7 +83,22 @@ const invitationAccessControl = (req, res, next) => {
     });
     return;
   }
+  next();
+};
+router.get(
+  '/checkLogin',
+  checkLogin,
+  (req, res) => {
+    res.send({
+      meta: {
+        code: HttpStatus.OK,
+        message: 'OK',
+      },
+    });
+  },
+);
 
+const checkInvitation = (req, res, next) => {
   if (!req.session.teamId) {
     res.status(HttpStatus.FORBIDDEN).send({
       meta: {
@@ -93,7 +108,23 @@ const invitationAccessControl = (req, res, next) => {
     });
     return;
   }
+  next();
+};
 
+router.get(
+  '/checkInvitation',
+  checkInvitation,
+  (req, res) => {
+    res.send({
+      meta: {
+        code: HttpStatus.OK,
+        message: 'OK',
+      },
+    });
+  },
+);
+
+const checkAccessControl = (req, res, next) => {
   const allowedIp = req.session.ipAddresses ?
     req.session.ipAddresses.split(/\r\n|\r|\n/) : undefined;
 
@@ -126,8 +157,8 @@ const invitationAccessControl = (req, res, next) => {
 };
 
 router.get(
-  '/invitationAccessControl',
-  invitationAccessControl,
+  '/checkAccessControl',
+  checkAccessControl,
   (req, res) => {
     res.send({
       meta: {
@@ -140,7 +171,9 @@ router.get(
 
 router.all(
   '/join',
-  invitationAccessControl,
+  checkLogin,
+  checkInvitation,
+  checkAccessControl,
   async (req, res) => {
     const invitation = ws.createTeamInvitationRequest(
       req.session.teamId,

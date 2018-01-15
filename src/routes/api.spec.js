@@ -77,18 +77,18 @@ describe('POST /api/sign', () => {
   });
 });
 
-describe('GET /api/invitationAccessControl', () => {
-  it('should return 200 for valid parameters', async () => {
+describe('GET /api/checkLogin', () => {
+  it('should return 200 for valid session', async () => {
     const ag2 = request.agent(app);
 
     await ag2
       .post('/api/test/session')
       .type('form')
-      .send({ primaryEmail: 'p', username: 'u', teamId: 1 })
+      .send({ primaryEmail: 'p', username: 'u' })
       .expect(200);
 
     await ag2
-      .get('/api/invitationAccessControl')
+      .get('/api/checkLogin')
       .expect(200);
   });
 
@@ -98,11 +98,11 @@ describe('GET /api/invitationAccessControl', () => {
     await ag2
       .post('/api/test/session')
       .type('form')
-      .send({ username: 'u', teamId: 1 })
+      .send({ username: 'u' })
       .expect(200);
 
     await ag2
-      .get('/api/invitationAccessControl')
+      .get('/api/checkLogin')
       .expect(403, {
         meta: {
           code: 403,
@@ -117,11 +117,11 @@ describe('GET /api/invitationAccessControl', () => {
     await ag2
       .post('/api/test/session')
       .type('form')
-      .send({ primaryEmail: 'p', teamId: 1 })
+      .send({ primaryEmail: 'p' })
       .expect(200);
 
     await ag2
-      .get('/api/invitationAccessControl')
+      .get('/api/checkLogin')
       .expect(403, {
         meta: {
           code: 403,
@@ -129,18 +129,27 @@ describe('GET /api/invitationAccessControl', () => {
         },
       });
   });
+});
 
-  it('should return 403 if teamId is missing', async () => {
+describe('GET /api/checkInvitation', () => {
+  it('should return 200 if teamId exists', async () => {
     const ag2 = request.agent(app);
 
     await ag2
       .post('/api/test/session')
       .type('form')
-      .send({ primaryEmail: 'p', username: 'u' })
+      .send({ teamId: 1 })
       .expect(200);
 
     await ag2
-      .get('/api/invitationAccessControl')
+      .get('/api/checkInvitation')
+      .expect(200);
+  });
+  it('should return 403 if teamId is missing', async () => {
+    const ag2 = request.agent(app);
+
+    await ag2
+      .get('/api/checkInvitation')
       .expect(403, {
         meta: {
           code: 403,
@@ -148,7 +157,18 @@ describe('GET /api/invitationAccessControl', () => {
         },
       });
   });
+});
 
+describe('GET /api/accessControl', () => {
+  context('when no access control exists', () => {
+    it('should return 200', async () => {
+      const ag2 = request.agent(app);
+
+      await ag2
+        .get('/api/checkAccessControl')
+        .expect(200);
+    });
+  });
   context('when IP address access control exists', () => {
     it('should return 200 if IP address is allowed', async () => {
       const ag2 = request.agent(app);
@@ -157,15 +177,12 @@ describe('GET /api/invitationAccessControl', () => {
         .post('/api/test/session')
         .type('form')
         .send({
-          primaryEmail: 'p',
-          username: 'u',
-          teamId: 1,
           ipAddresses: '127.0.0.1\n192.168.160.1',
         })
         .expect(200);
 
       await ag2
-        .get('/api/invitationAccessControl')
+        .get('/api/checkAccessControl')
         .set('X-Forwarded-For', '192.168.160.1')
         .expect(200);
     });
@@ -176,15 +193,12 @@ describe('GET /api/invitationAccessControl', () => {
         .post('/api/test/session')
         .type('form')
         .send({
-          primaryEmail: 'p',
-          username: 'u',
-          teamId: 1,
           ipAddresses: 'ip1\nip2',
         })
         .expect(200);
 
       await ag2
-        .get('/api/invitationAccessControl')
+        .get('/api/checkAccessControl')
         .expect(403, {
           meta: {
             code: 403,
@@ -202,14 +216,12 @@ describe('GET /api/invitationAccessControl', () => {
         .type('form')
         .send({
           primaryEmail: 'test@takkyuuplayer.com',
-          username: 'u',
-          teamId: 1,
           emailDomains: 'takkyuuplayer.com\ngmail.com',
         })
         .expect(200);
 
       await ag2
-        .get('/api/invitationAccessControl')
+        .get('/api/checkAccessControl')
         .expect(200);
     });
     it('should return 403 if primaryEmail is not allowed', async () => {
@@ -220,14 +232,12 @@ describe('GET /api/invitationAccessControl', () => {
         .type('form')
         .send({
           primaryEmail: 'test@yahoo.com',
-          username: 'u',
-          teamId: 1,
           emailDomains: 'takkyuuplayer.com\ngmail.com',
         })
         .expect(200);
 
       await ag2
-        .get('/api/invitationAccessControl')
+        .get('/api/checkAccessControl')
         .expect(403, {
           meta: {
             code: 403,
@@ -248,3 +258,4 @@ describe('GET /api/session', () => {
       });
   });
 });
+/* */
