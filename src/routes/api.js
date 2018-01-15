@@ -201,7 +201,7 @@ router.all(
           code: 200,
           message: 'OK',
         },
-        data: invited,
+        data: JSON.parse(invited),
       });
     } catch (e) {
       console.error(e);
