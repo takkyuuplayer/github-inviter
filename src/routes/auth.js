@@ -55,7 +55,7 @@ router.get('/github/callback', async (req, res) => {
     isAdmin,
   });
 
-  return isAdmin ? res.redirect('/admin') : res.redirect('/user');
+  return isAdmin ? res.redirect('/admin') : res.redirect('/invitation');
 });
 
 router.get('/token', (req, res) => {

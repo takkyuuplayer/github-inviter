@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import Github from 'webService/github';
 import includes from 'lodash/includes';
 import some from 'lodash/some';
+import find from 'lodash/find';
 import isUndefined from 'lodash/isUndefined';
 import { slurpJSON } from '../utils';
 import { signingSecret } from '../config';
@@ -165,6 +166,20 @@ router.get(
         code: HttpStatus.OK,
         message: 'OK',
       },
+    });
+  },
+);
+
+router.get(
+  '/invitation',
+  checkInvitation,
+  (req, res) => {
+    res.send({
+      meta: {
+        code: 200,
+        message: 'OK',
+      },
+      data: find(teams, { id: req.session.teamId }),
     });
   },
 );
