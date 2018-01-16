@@ -148,7 +148,7 @@ const checkAccessControl = (req, res, next) => {
     res.status(HttpStatus.FORBIDDEN).send({
       meta: {
         code: HttpStatus.FORBIDDEN,
-        message: `Your primary email must have one of [${allowedDomains.join(', ')}] (sub)domain(s)`,
+        message: `Your github's primary email address must end with [${allowedDomains.join(', ')}].`,
       },
     });
     return;

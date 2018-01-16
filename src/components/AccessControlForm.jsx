@@ -18,7 +18,7 @@ const AccessControlForm = ({
           onChange={e => handleChangeExpiresAt(e.target.value)}
           placeholder="e.g.) 2017-06-01 23:59:59"
         />
-        <small className="form-text text-muted">When the invitation link expires.</small>
+        <small className="form-text text-muted">Invitation link expiration datetime.</small>
       </div>
     </div>
     <div className="form-group row">
@@ -33,7 +33,7 @@ const AccessControlForm = ({
           placeholder="e.g.) 192.168.11.1"
         />
         <p className="form-text text-muted">
-          IP address list allowed to join the team separated by line break.
+          IP address(es) separated by line break.
         </p>
       </div>
     </div>
@@ -49,7 +49,7 @@ const AccessControlForm = ({
           placeholder="e.g.) @gmail.com"
         />
         <p className="form-text text-muted">
-          <strong>Primary</strong> email domain list allowed to join the team separated by line break.
+          <strong>Primary</strong> email domain(s) separated by line break.
         </p>
       </div>
     </div>

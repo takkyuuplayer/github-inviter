@@ -241,7 +241,7 @@ describe('GET /api/accessControl', () => {
         .expect(403, {
           meta: {
             code: 403,
-            message: 'Your primary email must have one of [takkyuuplayer.com, gmail.com] (sub)domain(s)',
+            message: "Your github's primary email address must end with [takkyuuplayer.com, gmail.com].",
           },
         });
     });
