@@ -172,7 +172,9 @@ router.get(
 
 router.get(
   '/invitation',
+  checkLogin,
   checkInvitation,
+  checkAccessControl,
   (req, res) => {
     res.send({
       meta: {
