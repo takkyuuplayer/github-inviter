@@ -1,8 +1,9 @@
 import React from 'react';
 
-const ConfirmInvitation = ({ team, handleClickJoinButton }) => {
+const ConfirmInvitation = ({ error, team, handleClickJoinButton }) => {
   const url = `https://github.com/orgs/${team.org}/teams/${team.slug}`;
   const link = <a target="_blank" href={url}>{team.org}/{team.slug}</a>;
+  const alert = error ? (<div className="alert alert-danger" role="alert">{error}</div>) : null;
   return (
     <div>
       <p>Do you want to join {link}?</p>
@@ -14,6 +15,7 @@ const ConfirmInvitation = ({ team, handleClickJoinButton }) => {
         >Join
         </button>
       </p>
+      {alert}
     </div>
   );
 };
@@ -41,6 +43,7 @@ class Invitation extends React.Component {
   state = {
     team: undefined,
     invitation: undefined,
+    error: undefined,
   }
   componentDidMount() {
     this.getInvitedTeam();
@@ -51,15 +54,31 @@ class Invitation extends React.Component {
     fetch('/api/invitation', {
       method: 'GET',
       credentials: 'include',
-    }).then(response => response.json())
-      .then(json => this.setState(Object.assign({}, this.state, { team: json.data })));
+    }).then(async (response) => {
+      const json = await response.json();
+
+      if (response.ok) {
+        this.setState(Object.assign({}, this.state, { team: json.data }));
+        return;
+      }
+      this.setState(Object.assign({}, this.state, { error: json.meta.message }));
+    });
   }
   joinInvitedTeam() {
+    this.setState(Object.assign({}, this.state, { error: undefined }));
+
     fetch('/api/join', {
       method: 'GET',
       credentials: 'include',
-    }).then(response => response.json())
-      .then(json => this.setState(Object.assign({}, this.state, { invitation: json.data })));
+    }).then(async (response) => {
+      const json = await response.json();
+
+      if (response.ok) {
+        this.setState(Object.assign({}, this.state, { invitation: json.data }));
+        return;
+      }
+      this.setState(Object.assign({}, this.state, { error: json.meta.message }));
+    });
   }
   render() {
     const { invitation, team } = this.state;
@@ -69,6 +88,7 @@ class Invitation extends React.Component {
       comp = <Invited team={team} invitation={invitation} />;
     } else if (team) {
       comp = (<ConfirmInvitation
+        error={this.state.error}
         team={team}
         handleClickJoinButton={(e) => {
               e.preventDefault();
@@ -76,7 +96,9 @@ class Invitation extends React.Component {
             }}
       />);
     } else {
-      comp = <p>Checking invitation...</p>;
+      comp = this.state.error
+        ? <div className="alert alert-danger" role="alert">{this.state.error}</div>
+        : <p>Checking invitation...</p>;
     }
 
     return (
