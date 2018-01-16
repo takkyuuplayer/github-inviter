@@ -1,37 +1,8 @@
 import React from 'react';
 
-const ConfirmInvitation = ({ error, team, handleClickJoinButton }) => {
-  const url = `https://github.com/orgs/${team.org}/teams/${team.slug}`;
-  const link = <a target="_blank" href={url}>{team.org}/{team.slug}</a>;
-  const alert = error ? (<div className="alert alert-danger" role="alert">{error}</div>) : null;
-  return (
-    <div>
-      <p>Do you want to join {link}?</p>
-      <p>
-        <button
-          type="button"
-          className="btn btn-primary btn-lg"
-          onClick={handleClickJoinButton}
-        >Join
-        </button>
-      </p>
-      {alert}
-    </div>
-  );
-};
-
-const Invited = ({ team, invitation }) => {
-  const url = `https://github.com/orgs/${team.org}/teams/${team.slug}`;
-  const link = <a target="_blank" href={url}>{team.org}/{team.slug}</a>;
-
-  if (invitation.state === 'active') {
-    return (<p>You are now a member of {link}</p>);
-  }
-  if (invitation.state === 'pending') {
-    return (<p>You are invited to {link}. Please check your email.</p>);
-  }
-  return `Unknow status: ${invitation.state}`;
-};
+import Invited from './Invited';
+import ConfirmInvitation from './ConfirmInvitation';
+import Error from './Error';
 
 class Invitation extends React.Component {
   constructor() {
@@ -85,27 +56,28 @@ class Invitation extends React.Component {
 
     let comp = null;
     if (invitation) {
-      comp = <Invited team={team} invitation={invitation} />;
+      comp = <Invited team={team} state={invitation.state} />;
     } else if (team) {
       comp = (<ConfirmInvitation
-        error={this.state.error}
         team={team}
-        handleClickJoinButton={(e) => {
+        handleJoin={(e) => {
               e.preventDefault();
               this.joinInvitedTeam();
             }}
       />);
     } else {
-      comp = this.state.error
-        ? <div className="alert alert-danger" role="alert">{this.state.error}</div>
-        : <p>Checking invitation...</p>;
+      comp = <p>Checking invitation...</p>;
     }
+    const error = this.state.error
+      ? <Error msg={this.state.error} />
+      : null;
 
     return (
       <div className="jumbotron">
         <h1>Github Inviter</h1>
         <hr />
         {comp}
+        {error}
       </div>
     );
   }
