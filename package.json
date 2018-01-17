@@ -49,7 +49,7 @@
   },
   "scripts": {
     "lint": "eslint --fix src test",
-    "postinstall": "npm run build",
+    "postinstall": "make; yarn run build",
     "start": "react-scripts start",
     "run": "$(npm bin)/babel-node ./bin/app.js",
     "build": "react-scripts build",
