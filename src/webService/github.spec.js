@@ -10,8 +10,8 @@ describe('webService/github', () => {
       const ws = new Github();
 
       assert.strictEqual(ws.personalToken, process.env.GH_PERSONAL_TOKEN);
-      assert.strictEqual(ws.clientId, process.env.GH_BASIC_CLIENT_ID);
-      assert.strictEqual(ws.clientSecret, process.env.GH_BASIC_CLIENT_SECRET);
+      assert.strictEqual(ws.clientId, process.env.GH_CLIENT_ID);
+      assert.strictEqual(ws.clientSecret, process.env.GH_CLIENT_SECRET);
       assert(ws.apiEndPoints);
     });
     it('can set property', () => {
@@ -21,7 +21,7 @@ describe('webService/github', () => {
 
       assert.strictEqual(ws.personalToken, process.env.GH_PERSONAL_TOKEN);
       assert.strictEqual(ws.clientId, 'foobar');
-      assert.strictEqual(ws.clientSecret, process.env.GH_BASIC_CLIENT_SECRET);
+      assert.strictEqual(ws.clientSecret, process.env.GH_CLIENT_SECRET);
     });
     it('should be freezed', () => {
       const ws = new Github();

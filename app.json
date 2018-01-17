@@ -12,11 +12,11 @@
       "description": "admin:org & user:email personal access token. https://github.com/settings/tokens",
       "value": "replace.me"
     },
-    "GH_BASIC_CLIENT_ID": {
+    "GH_CLIENT_ID": {
       "description": "https://github.com/settings/applications/new",
       "value": "replace.me"
     },
-    "GH_BASIC_CLIENT_SECRET": {
+    "GH_CLIENT_SECRET": {
       "description": "https://github.com/settings/applications/new",
       "value": "replace.me"
     }
