@@ -2,6 +2,9 @@
   "name": "js-github-inviter",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "9.2.0"
+  },
   "dependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
@@ -46,6 +49,7 @@
   },
   "scripts": {
     "lint": "eslint --fix src test",
+    "postinstall": "npm run build",
     "start": "react-scripts start",
     "run": "$(npm bin)/babel-node ./bin/app.js",
     "build": "react-scripts build",
