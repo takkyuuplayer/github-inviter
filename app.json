@@ -20,6 +20,5 @@
       "description": "https://github.com/settings/applications/new",
       "value": "replace.me"
     }
-  },
-  "image": "heroku/"
+  }
 }
