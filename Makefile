@@ -1,4 +1,6 @@
-.PHONY: test node_modules node_modules/upgrade cache
+.PHONY: test node_modules node_modules/upgrade cache build
+
+export NODE_PATH=src
 
 setup: node_modules node_modules/upgrade cache
 
@@ -10,6 +12,11 @@ cache:
 
 test:
 	yarn run test
+
+build:
+	yarn run build
+
+heroku: cache build
 
 travis: node_modules node_modules/upgrade
 	mkdir -p cache

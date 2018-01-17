@@ -49,9 +49,9 @@
   },
   "scripts": {
     "lint": "eslint --fix src test",
-    "postinstall": "make; yarn run build",
+    "postinstall": "make cache && make build",
     "start": "react-scripts start",
-    "run": "$(npm bin)/babel-node ./bin/app.js",
+    "run": "NODE_PATH=./src $(npm bin)/babel-node ./bin/app.js",
     "build": "react-scripts build",
     "test": "npm run test:script",
     "test:script": "mocha src/**/*.spec.{js,jsx}",
