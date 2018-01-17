@@ -1,6 +1,9 @@
 language: node_js
 env:
   global:
+    - GH_PERSONAL_TOKEN=dummy
+    - GH_CLIENT_ID=dummy
+    - GH_CLIENT_SECRET=dummy
     - TZ=Canada/Eastern
 before_install:
   - env | sort
