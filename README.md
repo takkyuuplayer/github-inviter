@@ -7,7 +7,7 @@ Invite users to your organizations/teams.
 
 ## Demo
 
-Join [tp-organization/github-inviter](https://github-inviter.herokuapp.com/auth/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOjI0OTMxNjYsImlhdCI6MTUxNjE2MzY0NX0.-W46qeVdfo2WQYZFpbQZDFKBRdce1tJ0Jv3y8-Pwypc)
+Join [tp-organization/github-inviter](https://github-inviter.herokuapp.com/auth/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZWFtSWQiOjI0OTMxNjYsImlhdCI6MTUxNjE2NTk5N30._c00kOvSKL8-ZHfQ1b6hdaN8wNOd2TvR3tcquMHY6zE)
 
 ## How to deploy
 
