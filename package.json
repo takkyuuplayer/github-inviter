@@ -37,15 +37,15 @@
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17",
+    "react-scripts": "1.1.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "request-promise": "^4.2.2",
     "sha256": "^0.2.0",
-    "sinon": "^4.1.2",
+    "sinon": "^4.1.6",
     "supertest": "^3.0.0",
     "urijs": "^1.19.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.2.1"
   },
   "scripts": {
     "lint": "eslint --fix src test",
