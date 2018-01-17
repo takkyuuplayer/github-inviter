@@ -1,0 +1,25 @@
+{
+  "name": "Github Inviter",
+  "description": "Invite users to your github organizations.",
+  "website": "https://github.com/takkyuuplayer/github-inviter",
+  "repository": "https://github.com/takkyuuplayer/github-inviter",
+  "env": {
+    "SIGNING_SECRET": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "GH_PERSONAL_TOKEN": {
+      "description": "admin:org & user:email personal access token. https://github.com/settings/tokens",
+      "value": "replace.me"
+    },
+    "GH_BASIC_CLIENT_ID": {
+      "description": "https://github.com/settings/applications/new",
+      "value": "replace.me"
+    },
+    "GH_BASIC_CLIENT_SECRET": {
+      "description": "https://github.com/settings/applications/new",
+      "value": "replace.me"
+    }
+  },
+  "image": "heroku/"
+}
